@@ -49,29 +49,40 @@
     }
     canvas.setAttribute('aria-label', value + '로 연결되는 QR 코드');
   }
-  function shorten(url) {
-    const cached = storage.read('yeon-short-' + url);
-    if (typeof cached === 'string' && /^https:\/\/is\.gd\/[A-Za-z0-9_]+$/.test(cached)) return Promise.resolve(cached);
-    return new Promise((resolve, reject) => {
-      const name = 'yeonShort_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
-      const script = document.createElement('script');
-      let timeout;
-      const cleanup = () => { clearTimeout(timeout); script.remove(); delete window[name]; };
-      window[name] = data => {
-        cleanup();
-        if (data && typeof data.shorturl === 'string' && /^https:\/\/is\.gd\/[A-Za-z0-9_]+$/.test(data.shorturl)) {
-          storage.write('yeon-short-' + url, data.shorturl); resolve(data.shorturl);
-        } else {
-          const message = data && Number(data.errorcode) === 3 ? '단축 서비스 요청 한도에 도달했어요. 1분 후 다시 시도해 주세요.' : '단축 서비스가 주소를 처리하지 못했어요. 공개된 웹 주소인지 확인하거나 잠시 후 다시 시도해 주세요.';
-          reject(new Error(message));
-        }
-      };
-      timeout = setTimeout(() => { cleanup(); reject(new Error('단축 서비스 응답이 늦어지고 있어요. 인터넷 연결을 확인하고 다시 시도해 주세요.')); }, 18000);
-      script.onerror = () => { cleanup(); reject(new Error('단축 서비스에 연결할 수 없어요. 잠시 후 다시 시도하거나 URL2QR에서 QR만 만들어 주세요.')); };
-      script.referrerPolicy = 'no-referrer';
-      script.src = 'https://is.gd/create.php?' + new URLSearchParams({format: 'json', url, callback: name});
-      document.head.appendChild(script);
-    });
+  async function shorten(url) {
+    const cacheKey = 'yeon-short-v2-' + url;
+    const isShortUrl = value => typeof value === 'string' && /^https:\/\/da\.gd\/[A-Za-z0-9_-]+$/.test(value);
+    const cached = storage.read(cacheKey);
+    if (isShortUrl(cached)) return cached;
+    const retryAt = storage.read('yeon-short-retry-at');
+    if (typeof retryAt === 'number' && Date.now() < retryAt) {
+      throw new Error('단축 서비스 요청 한도에 도달했어요. 잠시 후 다시 시도해 주세요.');
+    }
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const response = await fetch('https://da.gd/s?' + new URLSearchParams({url}), {
+        method: 'GET',
+        headers: {Accept: 'text/plain'},
+        mode: 'cors', credentials: 'omit', referrerPolicy: 'no-referrer',
+        signal: controller.signal
+      });
+      if (response.status === 429) {
+        const retryAfter = Number(response.headers.get('Retry-After'));
+        const seconds = Number.isFinite(retryAfter) && retryAfter > 0 ? Math.max(60, retryAfter) : 60;
+        storage.write('yeon-short-retry-at', Date.now() + seconds * 1000);
+        throw new Error('단축 서비스 요청 한도에 도달했어요. 1분 이상 기다린 후 다시 시도해 주세요.');
+      }
+      if (!response.ok) throw new Error('단축 서비스가 요청을 처리하지 못했어요. 주소를 확인하고 잠시 후 다시 시도해 주세요.');
+      const value = (await response.text()).trim();
+      if (!isShortUrl(value)) throw new Error('단축 서비스에서 올바른 주소를 받지 못했어요. 잠시 후 다시 시도해 주세요.');
+      storage.write(cacheKey, value);
+      return value;
+    } catch (err) {
+      if (err.name === 'AbortError') throw new Error('단축 서비스 응답이 늦어지고 있어요. 잠시 후 다시 시도해 주세요.');
+      if (err instanceof TypeError) throw new Error('단축 서비스에 연결할 수 없어요. 인터넷 연결을 확인하거나 URL2QR에서 QR만 만들어 주세요.');
+      throw err;
+    } finally { clearTimeout(timeout); }
   }
   function setBusy(value) {
     busy = value; input.disabled = value;

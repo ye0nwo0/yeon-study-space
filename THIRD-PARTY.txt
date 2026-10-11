@@ -2,8 +2,8 @@ QR Code generator library v1.8.0 — Project Nayuki
 https://github.com/nayuki/QR-Code-generator
 MIT License: full notice included in assets/vendor/qrcodegen.js.
 
-URL shortening service — is.gd
-https://is.gd/apishorteningreference.php
+URL shortening service — da.gd
+https://da.gd/help
 
 Noto Sans KR — Google Fonts, SIL Open Font License
 https://fonts.google.com/noto/specimen/Noto+Sans+KR

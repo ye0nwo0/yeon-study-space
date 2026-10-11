@@ -1,0 +1,10 @@
+QR Code generator library v1.8.0 — Project Nayuki
+https://github.com/nayuki/QR-Code-generator
+MIT License: full notice included in assets/vendor/qrcodegen.js.
+
+URL shortening service — is.gd
+https://is.gd/apishorteningreference.php
+
+Noto Sans KR — Google Fonts, SIL Open Font License
+https://fonts.google.com/noto/specimen/Noto+Sans+KR
+Fonts are optional; local system fonts are used when the service is unavailable.

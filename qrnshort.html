@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QRnShort · yeon</title><meta name="description" content="yeon의 대학교 과제물과 수업 도구를 모은 공간">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./style.css">
+<script src="./qrcodegen.js" defer></script><script src="./app.js" defer></script></head>
+<body data-mode="short"><a class="skip" href="#main">본문으로 이동</a><div class="shell">
+<header class="topbar"><a class="brand" href="./"><span class="brand-icon">y.</span><span>yeon<span class="brand-sub">STUDY SPACE</span></span></a>
+<nav aria-label="주 메뉴"><a href="./" >과제 홈</a><a href="./url2qr.html" >URL2QR</a><a href="./qrnshort.html" aria-current="page">QRnShort <span aria-hidden="true">↗</span></a></nav></header>
+<main id="main">
+<section class="tool-intro"><a class="back" href="./">← 과제 홈</a><p class="eyebrow">WEEK 06 / QR + SHORT LINK</p><h1>QRnShort<span class="title-dot">.</span></h1><h2>긴 링크는 짧게, 공유는 가볍게.</h2><p class="lead">단축 URL과 QR 코드를 한 번에 만들고 공유해 보세요.</p></section>
+<section class="tool-layout"><div class="input-panel"><p class="eyebrow">01 / YOUR LINK</p><h3>어떤 링크를 공유할까요?</h3>
+<form id="convert-form" novalidate><label class="field-label" for="url-input">웹사이트 주소</label><input id="url-input" name="url" class="url-input" type="url" inputmode="url" placeholder="https://example.com" autocomplete="url" aria-describedby="url-help status" required>
+<p id="url-help" class="tiny">https:// 또는 http://로 시작하는 주소를 입력해 주세요.</p>
+<div class="input-tools"><button type="button" id="example" class="subtle">예시 주소 넣기</button><button type="button" id="reset" class="subtle">초기화</button></div>
+<button id="submit" class="button primary" type="submit">단축 URL + QR 만들기 <span aria-hidden="true">↗</span></button>
+<p id="status" class="status" role="status" aria-live="polite">주소를 입력하고 변환 버튼을 눌러 주세요.</p></form>
+<div class="tool-note"><span class="note-icon">↗</span><div><strong>실제로 연결되는 단축 주소</strong><p>단축 URL은 is.gd에서 발급해요. 변환할 때 입력한 주소가 해당 서비스로 전송돼요.</p></div></div>
+<a class="sibling" href="./url2qr.html">5주차 URL2QR도 살펴보기 <span>→</span></a></div>
+<div class="result-panel"><div class="result-header"><p class="eyebrow">02 / READY TO SHARE</p><span id="result-badge" class="result-badge">입력 대기</span></div>
+<div id="empty-result" class="empty-result"><div class="empty-qr" aria-hidden="true"><span>↗</span></div><h3>공유가 시작되는 작은 사각형</h3><p>링크를 변환하면 여기에<br>QR 코드와 단축 URL이 나타나요.</p></div>
+<div id="result" hidden><div class="canvas-wrap"><canvas id="qr-canvas" role="img" aria-label="입력한 링크의 QR 코드"></canvas></div>
+<span id="result-label" class="field-label">단축 URL</span><a id="result-url" class="result-url" target="_blank" rel="noopener noreferrer"></a><p id="original-url" class="original-url"></p>
+<div class="result-actions"><button class="button secondary" id="copy" type="button">주소 복사</button><button class="button secondary" id="download" type="button">QR 저장 ↓</button></div></div></div></section>
+<section class="howto"><div><span>01</span><h3>주소 입력</h3><p>공유할 웹사이트의 주소를 붙여넣어요.</p></div><div><span>02</span><h3>링크 변환</h3><p>실제 단축 주소와 QR 코드를 만들어요.</p></div><div><span>03</span><h3>저장하고 공유</h3><p>주소를 복사하거나 QR 이미지를 저장해요.</p></div></section>
+</main><footer><span>yeon’s study space</span><span>하나씩 배우고, 차곡차곡 기록하기.</span><span>2026 · FALL SEMESTER</span></footer>
+</div></body></html>
